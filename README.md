@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/joliss/node-fixturify.png?branch=master)](https://travis-ci.org/joliss/node-fixturify)
 
-Convert objects into directory structures in the file system, and back again.
-Primarily useful when writing tests.
+Convert JSON objects into directory structures in the file system, and back
+again. Primarily useful when writing tests.
 
 ## Installation
 
