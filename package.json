@@ -1,0 +1,20 @@
+{
+  "name": "fixturify",
+  "description": "Convert objects into directory structures and back again",
+  "version": "0.0.0",
+  "author": "Jo Liss <joliss42@gmail.com>",
+  "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joliss/node-fixturify"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "rimraf": "^2.2.6",
+    "tap": "^0.4.8"
+  },
+  "scripts": {
+    "test": "tap --stderr --timeout 2 ./test.js"
+  }
+}
