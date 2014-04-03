@@ -12,9 +12,10 @@
   "dependencies": {},
   "devDependencies": {
     "rimraf": "^2.2.6",
-    "tap": "^0.4.8"
+    "tap": "^0.4.8",
+    "jshint": "^2.5.0"
   },
   "scripts": {
-    "test": "tap --stderr --timeout 2 ./test.js"
+    "test": "jshint *.js && tap --stderr --timeout 2 ./test.js"
   }
 }
