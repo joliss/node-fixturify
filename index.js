@@ -1,10 +1,9 @@
 var fs = require('fs')
-var path = require('path')
 
 exports.readSync = readSync
 function readSync (dir) {
   var obj = {}
-  entries = fs.readdirSync(dir).sort()
+  var entries = fs.readdirSync(dir).sort()
   for (var i = 0; i < entries.length; i++) {
     var entry = entries[i]
     var fullPath = dir + '/' + entry
