@@ -2,8 +2,8 @@
 
 [![Build Status](https://travis-ci.org/joliss/node-fixturify.png?branch=master)](https://travis-ci.org/joliss/node-fixturify)
 
-Convert JSON objects into directory structures in the file system, and back
-again. Primarily useful when writing tests.
+Convert JSON objects into directory structures on the file system, and back
+again. This package is primarily useful for writing tests.
 
 ## Installation
 
@@ -50,4 +50,4 @@ To keep the API simple, node-fixturify has the following limitations:
 
 * Symlinks are represented as arrays of length 1. We do this because symlinks
   are important to support, and arrays, though ugly, are an easy way to
-  implement them.
+  represent them.
