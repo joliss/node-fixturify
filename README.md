@@ -51,3 +51,6 @@ To keep the API simple, node-fixturify has the following limitations:
 * Symlinks are represented as arrays of length 1. We do this because symlinks
   are important to support, and arrays, though ugly, are an easy way to
   represent them.
+
+* There currently isn't an option to follow symlinks. This might be worth
+  adding.
