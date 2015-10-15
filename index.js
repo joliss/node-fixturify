@@ -7,11 +7,9 @@ function readSync (dir) {
   for (var i = 0; i < entries.length; i++) {
     var entry = entries[i]
     var fullPath = dir + '/' + entry
-    var stats = fs.lstatSync(fullPath)
+    var stats = fs.statSync(fullPath) // stat, unlike lstat, follows symlinks
     if (stats.isFile()) {
       obj[entry] = fs.readFileSync(fullPath, { encoding: 'utf8' })
-    } else if (stats.isSymbolicLink()) {
-      obj[entry] = [fs.readlinkSync(fullPath)]
     } else if (stats.isDirectory()) {
       obj[entry] = readSync(fullPath)
     } else {
@@ -29,16 +27,11 @@ function writeSync (dir, obj) {
       var value = obj[entry]
       if (typeof value === 'string') {
         fs.writeFileSync(fullPath, value, { encoding: 'utf8' })
-      } else if (Array.isArray(value)) {
-        if (value.length !== 1) throw new Error(entry + ' in ' + dir + ': Expected array to have length 1, got ' + value)
-        // symlinkSync supports a third "type" argument on Windows: 'dir',
-        // 'file' (default), or 'junction'; I am confused about this
-        fs.symlinkSync(value[0], fullPath)
       } else if (typeof value === 'object') {
         fs.mkdirSync(fullPath)
         writeSync(fullPath, value)
       } else {
-        throw new Error(entry + ' in ' + dir + ': Expected string, array, or object, got ' + value)
+        throw new Error(entry + ' in ' + dir + ': Expected string or object, got ' + value)
       }
     }
   }
