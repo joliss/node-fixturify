@@ -1,5 +1,7 @@
 # master
 
+# 0.2.0
+
 * Always follow symlinks
 
 # 0.1.1
