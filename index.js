@@ -44,3 +44,36 @@ function writeSync (dir, obj) {
     }
   }
 }
+
+exports.removeSync = removeSync
+function removeSync (dir, obj) {
+  var removes = [];
+  var fullPath;
+
+  for (var entry in obj) {
+    if (obj.hasOwnProperty(entry)) {
+      var value = obj[entry];
+      fullPath = dir + '/' + entry
+
+      if (typeof value === 'string') {
+        removes.push(fullPath);
+      } else if (typeof value === 'object') {
+        removes.push(fullPath);
+        removeSync(fullPath, value)
+      } else {
+        throw new Error(entry + ' in ' + dir + ': Expected string or object, got ' + value)
+      }
+    }
+  }
+
+  for (var i = 0; i < removes.length; i++) {
+    fullPath = removes[i];
+    var stats = fs.statSync(fullPath) // stat, unlike lstat, follows symlinks
+
+    if (stats.isFile()) {
+      fs.unlinkSync(fullPath);
+    } else if (stats.isDirectory() && fs.readdirSync(fullPath).length === 0) {
+      fs.rmdirSync(fullPath);
+    }
+  }
+}
