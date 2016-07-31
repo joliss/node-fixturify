@@ -28,7 +28,15 @@ function writeSync (dir, obj) {
       if (typeof value === 'string') {
         fs.writeFileSync(fullPath, value, { encoding: 'utf8' })
       } else if (typeof value === 'object') {
-        fs.mkdirSync(fullPath)
+        try {
+          fs.mkdirSync(fullPath)
+        } catch (e) {
+          // if the directory already exists, carry on.
+          // This is to support, re-appling (append-only) of fixtures
+          if (!(typeof e === 'object' && e !== null && e.code === 'EEXIST')) {
+            throw e
+          }
+        }
         writeSync(fullPath, value)
       } else {
         throw new Error(entry + ' in ' + dir + ': Expected string or object, got ' + value)

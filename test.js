@@ -10,15 +10,30 @@ test('writeSync', function (t) {
   fs.mkdirSync('testdir.tmp')
   fixturify.writeSync('testdir.tmp', {
     'foo.txt': 'foo.txt contents',
-      'subdir': {
-        'bar.txt': 'bar.txt contents'
-      }
-    })
+    'subdir': {
+      'bar.txt': 'bar.txt contents'
+    }
+  })
 
   t.deepEqual(fs.readdirSync('testdir.tmp').sort(), ['foo.txt', 'subdir'])
   t.deepEqual(fs.readdirSync('testdir.tmp/subdir').sort(), ['bar.txt'])
-  t.equal(fs.readFileSync('testdir.tmp/foo.txt', { encoding: 'utf8' }), 'foo.txt contents')
-  t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', { encoding: 'utf8' }), 'bar.txt contents')
+  t.equal(fs.readFileSync('testdir.tmp/foo.txt', 'UTF8'), 'foo.txt contents')
+  t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', 'UTF8'), 'bar.txt contents')
+
+  fixturify.writeSync('testdir.tmp', {
+    'something': 'foo.txt contents',
+    'else': {
+      'bar.txt': 'bar.txt contents'
+    }
+  })
+
+  t.deepEqual(fs.readdirSync('testdir.tmp').sort(), ['else', 'foo.txt', 'something', 'subdir'])
+  t.deepEqual(fs.readdirSync('testdir.tmp/subdir').sort(), ['bar.txt'])
+  t.deepEqual(fs.readdirSync('testdir.tmp/else').sort(), ['bar.txt'])
+
+  t.equal(fs.readFileSync('testdir.tmp/foo.txt', 'UTF8'), 'foo.txt contents')
+  t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', 'UTF8'), 'bar.txt contents')
+  t.equal(fs.readFileSync('testdir.tmp/else/bar.txt',  'UTF8'), 'bar.txt contents')
 
   rimraf.sync('testdir.tmp')
   t.end()
