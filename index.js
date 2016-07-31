@@ -1,4 +1,4 @@
-var fs = require('fs')
+var fs = require('fs-extra')
 
 exports.readSync = readSync
 function readSync (dir) {
@@ -25,55 +25,38 @@ function writeSync (dir, obj) {
     if (obj.hasOwnProperty(entry)) {
       var fullPath = dir + '/' + entry
       var value = obj[entry]
+      var stat;
+
+      try {
+        stat = fs.statSync(fullPath);
+      } catch (e) {}
+
       if (typeof value === 'string') {
-        fs.writeFileSync(fullPath, value, { encoding: 'utf8' })
-      } else if (typeof value === 'object') {
-        try {
-          fs.mkdirSync(fullPath)
-        } catch (e) {
-          // if the directory already exists, carry on.
-          // This is to support, re-appling (append-only) of fixtures
-          if (!(typeof e === 'object' && e !== null && e.code === 'EEXIST')) {
-            throw e
-          }
+        if (stat && stat.isDirectory()) {
+          fs.removeSync(fullPath)
         }
-        writeSync(fullPath, value)
-      } else {
-        throw new Error(entry + ' in ' + dir + ': Expected string or object, got ' + value)
-      }
-    }
-  }
-}
-
-exports.removeSync = removeSync
-function removeSync (dir, obj) {
-  var removes = [];
-  var fullPath;
-
-  for (var entry in obj) {
-    if (obj.hasOwnProperty(entry)) {
-      var value = obj[entry];
-      fullPath = dir + '/' + entry
-
-      if (typeof value === 'string') {
-        removes.push(fullPath);
+        fs.writeFileSync(fullPath, value, 'UTF8')
       } else if (typeof value === 'object') {
-        removes.push(fullPath);
-        removeSync(fullPath, value)
+        if (value === null) {
+          fs.removeSync(fullPath)
+        } else {
+          try {
+            if (stat && stat.isFile()) {
+              fs.unlinkSync(fullPath)
+            }
+            fs.mkdirSync(fullPath)
+          } catch (e) {
+            // if the directory already exists, carry on.
+            // This is to support, re-appling (append-only) of fixtures
+            if (!(typeof e === 'object' && e !== null && e.code === 'EEXIST')) {
+              throw e
+            }
+          }
+          writeSync(fullPath, value)
+        }
       } else {
         throw new Error(entry + ' in ' + dir + ': Expected string or object, got ' + value)
       }
-    }
-  }
-
-  for (var i = 0; i < removes.length; i++) {
-    fullPath = removes[i];
-    var stats = fs.statSync(fullPath) // stat, unlike lstat, follows symlinks
-
-    if (stats.isFile()) {
-      fs.unlinkSync(fullPath);
-    } else if (stats.isDirectory() && fs.readdirSync(fullPath).length === 0) {
-      fs.rmdirSync(fullPath);
     }
   }
 }

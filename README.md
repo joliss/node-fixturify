@@ -29,11 +29,16 @@ fixturify.writeSync('testdir', obj) // write it to disk
 
 fixturify.readSync('testdir') // => deep-equals obj
 
-fs.removeSync('testDir', {
-    'subdir': { 'bar.txt' }
-  }) // remove subdir/bar.txt
+fs.writeSync('testDir', {
+  'subdir': { 'bar.txt': null }
+}) // remove subdir/bar.txt
 
 fixturify.readSync('testdir') // => { foo.txt: 'foo.text contents' }
+
+fs.writeSync('testDir', {
+  'subdir': null
+}) // remove subdir/
+
 ```
 
 File contents are decoded and encoded with UTF-8.
@@ -54,6 +59,3 @@ To keep the API simple, node-fixturify has the following limitations:
 
 * File contents are automatically encoded/decoded into strings. Binary files
   are not supported.
-
-* Removing files resulting in a newly empty directory, will also remove that directory
-
