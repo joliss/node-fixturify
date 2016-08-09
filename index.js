@@ -21,6 +21,14 @@ function readSync (dir) {
 
 exports.writeSync = writeSync
 function writeSync (dir, obj) {
+  if ('string' !== typeof dir) {
+    throw new TypeError('writeSync first argument must be a string')
+  }
+
+  if ('object' !== typeof obj && obj !== null) {
+    throw new TypeError('writeSync second argument must be an object')
+  }
+
   for (var entry in obj) {
     if (obj.hasOwnProperty(entry)) {
       var fullPath = dir + '/' + entry
@@ -35,6 +43,7 @@ function writeSync (dir, obj) {
         if (stat && stat.isDirectory()) {
           fs.removeSync(fullPath)
         }
+
         fs.writeFileSync(fullPath, value, 'UTF8')
       } else if (typeof value === 'object') {
         if (value === null) {

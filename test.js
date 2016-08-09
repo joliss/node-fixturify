@@ -34,13 +34,13 @@ test('writeSync', function (t) {
   t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', 'UTF8'), 'bar.txt contents')
   t.equal(fs.readFileSync('testdir.tmp/else/bar.txt',  'UTF8'), 'bar.txt contents')
 
-  fixturify.writeSync('testDir.tmp', {
+  fixturify.writeSync('testdir.tmp', {
     'else': 'else is now a file'
   })
 
   t.equal(fs.readFileSync('testdir.tmp/else',  'UTF8'), 'else is now a file')
 
-  fixturify.writeSync('testDir.tmp', {
+  fixturify.writeSync('testdir.tmp', {
     'empty-dir': { }
   })
   t.deepEqual(fs.readdirSync('testdir.tmp/empty-dir').sort(), [])
@@ -123,6 +123,22 @@ test('error conditions', function (t) { test('writeSync requires directory to ex
   test('readSync requires directory to exist', function (t) {
     t.throws(function () {
       fixturify.readSync('doesnotexist')
+    })
+    t.end()
+  })
+
+  test('writeSync arguments requires specific input', function (t) {
+    t.throws(function () {
+      fixturify.writeSync()
+    })
+    t.throws(function () {
+      fixturify.writeSync(null)
+    })
+    t.throws(function () {
+      fixturify.writeSync(null, null)
+    })
+    t.throws(function () {
+      fixturify.writeSync(null, {})
     })
     t.end()
   })
