@@ -28,6 +28,17 @@ var obj = {
 fixturify.writeSync('testdir', obj) // write it to disk
 
 fixturify.readSync('testdir') // => deep-equals obj
+
+fs.writeSync('testDir', {
+  'subdir': { 'bar.txt': null }
+}) // remove subdir/bar.txt
+
+fixturify.readSync('testdir') // => { foo.txt: 'foo.text contents' }
+
+fs.writeSync('testDir', {
+  'subdir': null
+}) // remove subdir/
+
 ```
 
 File contents are decoded and encoded with UTF-8.

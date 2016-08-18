@@ -1,4 +1,4 @@
-var fs = require('fs')
+var fs = require('fs-extra')
 
 exports.readSync = readSync
 function readSync (dir) {
@@ -21,15 +21,48 @@ function readSync (dir) {
 
 exports.writeSync = writeSync
 function writeSync (dir, obj) {
+  if ('string' !== typeof dir) {
+    throw new TypeError('writeSync first argument must be a string')
+  }
+
+  if ('object' !== typeof obj && obj !== null) {
+    throw new TypeError('writeSync second argument must be an object')
+  }
+
   for (var entry in obj) {
     if (obj.hasOwnProperty(entry)) {
       var fullPath = dir + '/' + entry
       var value = obj[entry]
+      var stat;
+
+      try {
+        stat = fs.statSync(fullPath);
+      } catch (e) {}
+
       if (typeof value === 'string') {
-        fs.writeFileSync(fullPath, value, { encoding: 'utf8' })
+        if (stat && stat.isDirectory()) {
+          fs.removeSync(fullPath)
+        }
+
+        fs.writeFileSync(fullPath, value, 'UTF8')
       } else if (typeof value === 'object') {
-        fs.mkdirSync(fullPath)
-        writeSync(fullPath, value)
+        if (value === null) {
+          fs.removeSync(fullPath)
+        } else {
+          try {
+            if (stat && stat.isFile()) {
+              fs.unlinkSync(fullPath)
+            }
+            fs.mkdirSync(fullPath)
+          } catch (e) {
+            // if the directory already exists, carry on.
+            // This is to support, re-appling (append-only) of fixtures
+            if (!(typeof e === 'object' && e !== null && e.code === 'EEXIST')) {
+              throw e
+            }
+          }
+          writeSync(fullPath, value)
+        }
       } else {
         throw new Error(entry + ' in ' + dir + ': Expected string or object, got ' + value)
       }
