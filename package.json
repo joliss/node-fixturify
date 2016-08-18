@@ -13,11 +13,11 @@
     "fs-extra": "^0.30.0"
   },
   "devDependencies": {
+    "jshint": "~2.5.0",
     "rimraf": "^2.2.6",
-    "tap": "^0.4.8",
-    "jshint": "~2.5.0"
+    "tap": "^6.3.2"
   },
   "scripts": {
-    "test": "jshint *.js && tap --stderr --timeout 2 ./test.js"
+    "test": "jshint *.js && tap --timeout 2 ./test.js"
   }
 }
