@@ -21,8 +21,8 @@ function readSync (dir) {
 
 exports.writeSync = writeSync
 function writeSync (dir, obj) {
-  if ('string' !== typeof dir) {
-    throw new TypeError('writeSync first argument must be a string')
+  if ('string' !== typeof dir || dir === '') {
+    throw new TypeError('writeSync first argument must be a non-empty string')
   }
 
   if ('object' !== typeof obj && obj !== null) {
@@ -31,6 +31,15 @@ function writeSync (dir, obj) {
 
   for (var entry in obj) {
     if (obj.hasOwnProperty(entry)) {
+      if ('string' !== typeof entry || entry === '') {
+        throw new Error('Directory entry must be a non-empty string')
+      }
+      if (entry === '.' || entry === '..') {
+        throw new Error('Directory entry must not be "." or ".."')
+      }
+      if (entry.indexOf('/') !== -1 || entry.indexOf('\\') !== -1) {
+        throw new Error('Directory entry must not contain "/" or "\\"')
+      }
       var fullPath = dir + '/' + entry
       var value = obj[entry]
       var stat;

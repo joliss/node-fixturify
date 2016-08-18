@@ -143,6 +143,32 @@ test('error conditions', function (t) { test('writeSync requires directory to ex
     t.end()
   })
 
+  test('writeSync guards against misuse that could cause data loss', function (t) {
+    // Test that we guard against usage errors that might cause data loss
+    // through fs.removeSync('' + '/' + '') or similar.
+    rimraf.sync('testdir.tmp')
+    fs.mkdirSync('testdir.tmp')
+    t.throws(function () {
+      fixturify.writeSync('', { })
+    }, /non-empty string/)
+    t.throws(function () {
+      fixturify.writeSync('testdir.tmp', { '': 'contents' })
+    }, /non-empty string/)
+    t.throws(function () {
+      fixturify.writeSync('testdir.tmp', { '.': { } })
+    }, /must not be "\." or "\.\."/)
+    t.throws(function () {
+      fixturify.writeSync('testdir.tmp', { '..': { } })
+    }, /must not be "\." or "\.\."/)
+    t.throws(function () {
+      fixturify.writeSync('testdir.tmp', { 'foo/bar': { } })
+    }, /must not contain "\/" or "\\"/)
+    t.throws(function () {
+      fixturify.writeSync('testdir.tmp', { 'foo\\bar': { } })
+    }, /must not contain "\/" or "\\"/)
+    t.end()
+  })
+
   test('readSync throws on broken symlinks', function(t) {
     rimraf.sync('testdir.tmp')
     fs.mkdirSync('testdir.tmp')
