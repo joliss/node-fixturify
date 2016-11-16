@@ -14,6 +14,7 @@ npm install --save-dev fixturify
 ## Usage
 
 ```js
+var fs = require('fs')
 var fixturify = require('fixturify')
 
 fs.mkdirSync('testdir')
@@ -29,13 +30,13 @@ fixturify.writeSync('testdir', obj) // write it to disk
 
 fixturify.readSync('testdir') // => deep-equals obj
 
-fs.writeSync('testDir', {
+fixturify.writeSync('testDir', {
   'subdir': { 'bar.txt': null }
 }) // remove subdir/bar.txt
 
 fixturify.readSync('testdir') // => { foo.txt: 'foo.text contents' }
 
-fs.writeSync('testDir', {
+fixturify.writeSync('testDir', {
   'subdir': null
 }) // remove subdir/
 
