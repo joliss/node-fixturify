@@ -21,6 +21,8 @@ function readSync (dir) {
 
 exports.writeSync = writeSync
 function writeSync (dir, obj) {
+  fs.mkdirpSync(dir);
+
   if ('string' !== typeof dir || dir === '') {
     throw new TypeError('writeSync first argument must be a non-empty string')
   }

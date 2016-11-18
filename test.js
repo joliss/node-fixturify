@@ -6,7 +6,6 @@ var fixturify = require('./')
 
 test('writeSync', function (t) {
   rimraf.sync('testdir.tmp')
-  fs.mkdirSync('testdir.tmp')
   fixturify.writeSync('testdir.tmp', {
     'foo.txt': 'foo.txt contents',
     'subdir': {
@@ -113,19 +112,7 @@ test('writeSync remove', function (t) {
   t.end()
 })
 
-test('error conditions', function (t) { test('writeSync requires directory to exist, if given non-empty object', function (t) {
-    t.throws(function () {
-      fixturify.writeSync('doesnotexist', { 'foo.txt': 'contents' })
-    })
-    t.end()
-  })
-
-  test('readSync requires directory to exist', function (t) {
-    t.throws(function () {
-      fixturify.readSync('doesnotexist')
-    })
-    t.end()
-  })
+test('error conditions', function (t) {
 
   test('writeSync arguments requires specific input', function (t) {
     t.throws(function () {
@@ -147,7 +134,6 @@ test('error conditions', function (t) { test('writeSync requires directory to ex
     // Test that we guard against usage errors that might cause data loss
     // through fs.removeSync('' + '/' + '') or similar.
     rimraf.sync('testdir.tmp')
-    fs.mkdirSync('testdir.tmp')
     t.throws(function () {
       fixturify.writeSync('', { })
     }, /non-empty string/)
