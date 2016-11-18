@@ -17,8 +17,6 @@ npm install --save-dev fixturify
 var fs = require('fs')
 var fixturify = require('fixturify')
 
-fs.mkdirSync('testdir')
-
 var obj = {
   'foo.txt': 'foo.txt contents',
   'subdir': {
