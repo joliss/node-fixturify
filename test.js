@@ -155,6 +155,28 @@ test('error conditions', function (t) {
     t.end()
   })
 
+  test('writeSync handles overwriting a file and then creating a new file', function(t) {
+    rimraf.sync('testdir.tmp')
+    fs.mkdirSync('testdir.tmp')
+
+    fixturify.writeSync('testdir.tmp', {
+      'a.txt': 'a.txt content',
+      'b': {}
+    })
+
+    t.deepEqual(fs.readdirSync('testdir.tmp').sort(), ['a.txt', 'b'])
+
+    fixturify.writeSync('testdir.tmp', {
+      'a.txt': 'a.txt updated',
+      'c': {}
+    })
+
+    t.deepEqual(fs.readdirSync('testdir.tmp').sort(), ['a.txt', 'b', 'c'])
+
+    rimraf.sync('testdir.tmp')
+    t.end()
+  })
+
   test('readSync throws on broken symlinks', function(t) {
     rimraf.sync('testdir.tmp')
     fs.mkdirSync('testdir.tmp')
