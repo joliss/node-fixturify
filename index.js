@@ -48,7 +48,9 @@ function writeSync (dir, obj) {
 
       try {
         stat = fs.statSync(fullPath);
-      } catch (e) {}
+      } catch (e) {
+        stat = undefined;
+      }
 
       if (typeof value === 'string') {
         if (stat && stat.isDirectory()) {
