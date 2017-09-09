@@ -10,7 +10,8 @@
     "url": "https://github.com/joliss/node-fixturify"
   },
   "dependencies": {
-    "fs-extra": "^0.30.0"
+    "fs-extra": "^0.30.0",
+    "matcher-collection": "^1.0.4"
   },
   "devDependencies": {
     "jshint": "~2.5.0",

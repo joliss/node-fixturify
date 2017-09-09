@@ -1,17 +1,42 @@
+var path = require('path')
 var fs = require('fs-extra')
+var MatcherCollection = require('matcher-collection')
 
 exports.readSync = readSync
-function readSync (dir) {
+function readSync (dir, options, relativeRoot) {
+  options = options || {}
+  var include = options.include
+  var exclude = options.exclude
+  relativeRoot = relativeRoot || '';
+
+  var includeMatcher
+  var excludeMatcher
+  if (include) {
+    includeMatcher = new MatcherCollection(include)
+  }
+  if (exclude) {
+    excludeMatcher = new MatcherCollection(exclude)
+  }
+
   var obj = {}
   var entries = fs.readdirSync(dir).sort()
   for (var i = 0; i < entries.length; i++) {
     var entry = entries[i]
-    var fullPath = dir + '/' + entry
+
+    var relativePath = path.join(relativeRoot, entry);
+    if (includeMatcher && !includeMatcher.match(relativePath)) {
+      continue
+    }
+    if (excludeMatcher && excludeMatcher.match(relativePath)) {
+      continue
+    }
+
+    var fullPath = path.join(dir, entry)
     var stats = fs.statSync(fullPath) // stat, unlike lstat, follows symlinks
     if (stats.isFile()) {
       obj[entry] = fs.readFileSync(fullPath, { encoding: 'utf8' })
     } else if (stats.isDirectory()) {
-      obj[entry] = readSync(fullPath)
+      obj[entry] = readSync(fullPath, options, relativePath)
     } else {
       throw new Error('Stat\'ed ' + fullPath + ' but it is neither file, symlink, nor directory')
     }

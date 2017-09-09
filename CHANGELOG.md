@@ -1,5 +1,7 @@
 # master
 
+* Add `include` and `exclude` options to `readSync`
+
 # 0.3.3
 
 * [BUGIFX] Ensure stat information is reset for each item in fixture when writing
