@@ -67,6 +67,45 @@ test('readSync', function (t) {
   t.end()
 })
 
+test('readSync include', function (t) {
+  rimraf.sync('testdir.tmp')
+  fs.mkdirSync('testdir.tmp')
+  fs.writeFileSync('testdir.tmp/foo.txt', 'foo.txt contents')
+  fs.mkdirSync('testdir.tmp/subdir')
+  fs.writeFileSync('testdir.tmp/subdir/bar.txt', 'bar.txt contents')
+  fs.symlinkSync('../foo.txt', 'testdir.tmp/subdir/symlink')
+
+  t.deepEqual(fixturify.readSync('testdir.tmp', {
+    include: ['foo*']
+  }), {
+    'foo.txt': 'foo.txt contents'
+  })
+
+  rimraf.sync('testdir.tmp')
+  t.end()
+})
+
+test('readSync exclude', function (t) {
+  rimraf.sync('testdir.tmp')
+  fs.mkdirSync('testdir.tmp')
+  fs.writeFileSync('testdir.tmp/foo.txt', 'foo.txt contents')
+  fs.mkdirSync('testdir.tmp/subdir')
+  fs.writeFileSync('testdir.tmp/subdir/bar.txt', 'bar.txt contents')
+  fs.symlinkSync('../foo.txt', 'testdir.tmp/subdir/symlink')
+
+  t.deepEqual(fixturify.readSync('testdir.tmp', {
+    exclude: ['subdir/bar*']
+  }), {
+    'foo.txt': 'foo.txt contents',
+    'subdir': {
+      'symlink': 'foo.txt contents'
+    }
+  })
+
+  rimraf.sync('testdir.tmp')
+  t.end()
+})
+
 test('writeSync remove', function (t) {
   rimraf.sync('testdir.tmp')
   fs.mkdirSync('testdir.tmp')
