@@ -1,5 +1,7 @@
 # master
 
+# 0.3.4
+
 * Add `include` and `exclude` options to `readSync`
 
 # 0.3.3
