@@ -1,5 +1,9 @@
 # master
 
+# 1.0.1
+
+* fix types, correctly expose Options and DirJSON
+
 # 1.0.0
 
 * typescript
