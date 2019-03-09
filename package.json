@@ -18,6 +18,9 @@
     "rimraf": "^2.6.3",
     "tap": "^12.6.0"
   },
+  "engines": {
+    "node": "6.* || 8.* || >= 10.*"
+  },
   "scripts": {
     "test": "jshint *.js && tap --timeout 2 ./test.js"
   }
