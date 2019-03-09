@@ -1,6 +1,7 @@
 # node-fixturify
 
-[![Build Status](https://travis-ci.org/joliss/node-fixturify.png?branch=master)](https://travis-ci.org/joliss/node-fixturify) [![Build status](https://ci.appveyor.com/api/projects/status/yuyrlj8b0ndxohim/branch/master?svg=true)](https://ci.appveyor.com/project/embercli/node-fixturify/branch/master)
+[![Build Status](https://travis-ci.org/joliss/node-fixturify.png?branch=master)](https://travis-ci.org/joliss/node-fixturify) [![Build status](https://ci.appveyor.com/api/projects/status/l86l1h32q2047089?svg=true)](https://ci.appveyor.com/project/embercli/node-fixturify-xl24o)
+
 
 Convert JSON objects into directory structures on the file system, and back
 again. This package is primarily useful for writing tests.
