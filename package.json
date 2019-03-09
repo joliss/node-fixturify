@@ -10,13 +10,16 @@
     "url": "https://github.com/joliss/node-fixturify"
   },
   "dependencies": {
-    "fs-extra": "^0.30.0",
+    "fs-extra": "^7.0.1",
     "matcher-collection": "^1.0.4"
   },
   "devDependencies": {
-    "jshint": "~2.5.0",
-    "rimraf": "^2.2.6",
-    "tap": "^6.3.2"
+    "jshint": "~2.10.1",
+    "rimraf": "^2.6.3",
+    "tap": "^12.6.0"
+  },
+  "engines": {
+    "node": "6.* || 8.* || >= 10.*"
   },
   "scripts": {
     "test": "jshint *.js && tap --timeout 2 ./test.js"
