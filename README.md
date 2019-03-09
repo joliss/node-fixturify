@@ -8,16 +8,16 @@ again. This package is primarily useful for writing tests.
 ## Installation
 
 ```bash
-npm install --save-dev fixturify
+yarn add fixturify
 ```
 
 ## Usage
 
 ```js
-var fs = require('fs')
-var fixturify = require('fixturify')
+const fs = require('fs')
+const fixturify = require('fixturify')
 
-var obj = {
+const obj = {
   'foo.txt': 'foo.txt contents',
   'subdir': {
     'bar.txt': 'bar.txt contents'
