@@ -4,6 +4,10 @@ import fixturify = require('./')
 
 const test = require('tap').test;
 
+// smoke test the existence of these types via the typescript type checker
+let DirJSON: fixturify.DirJSON;
+let Options: fixturify.Options;
+
 test('writeSync', function (t: any) {
   rimraf.sync('testdir.tmp');
   fixturify.writeSync('testdir.tmp', {
