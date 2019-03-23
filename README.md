@@ -47,6 +47,24 @@ fixturify.writeSync('testDir', {
 
 ```
 
+```js
+const fs = require('fs')
+const fixturify = require('fixturify')
+
+const obj = {
+  'subdir': {
+    'foo.txt': 'foo.txt contents'
+  },
+  'emptydir': {}
+}
+
+fixturify.writeSync('testdir', obj) // write it to disk
+
+fixturify.readSync('testdir', { ignoreEmptyDirs: true })
+// => { subdir: { foo.txt': 'foo.txt contents' } }
+
+```
+
 File contents are decoded and encoded with UTF-8.
 
 `fixture.readSync` follows symlinks. It throws an error if it encounters a

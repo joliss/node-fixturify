@@ -110,6 +110,32 @@ test('readSync exclude', function (t: any) {
   t.end();
 });
 
+test('readSync ignoreEmptyDirs false', function (t: any) {
+  rimraf.sync('testdir.tmp');
+  fs.mkdirSync('testdir.tmp');
+  fs.mkdirSync('testdir.tmp/emptydir');
+
+  t.deepEqual(fixturify.readSync('testdir.tmp'), {
+    'emptydir': {}
+  });
+
+  rimraf.sync('testdir.tmp');
+  t.end();
+});
+
+test('readSync ignoreEmptyDirs true', function (t: any) {
+  rimraf.sync('testdir.tmp');
+  fs.mkdirSync('testdir.tmp');
+  fs.mkdirSync('testdir.tmp/emptydir');
+
+  t.deepEqual(fixturify.readSync('testdir.tmp', {
+    ignoreEmptyDirs: true
+  }), {});
+
+  rimraf.sync('testdir.tmp');
+  t.end();
+});
+
 test('writeSync remove', function (t: any) {
   rimraf.sync('testdir.tmp');
   fs.mkdirSync('testdir.tmp');

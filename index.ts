@@ -11,11 +11,13 @@ namespace fixturify {
   export interface Options {
     include?: (IMinimatch | string)[];
     exclude?: (IMinimatch | string)[];
+    ignoreEmptyDirs?: boolean;
   }
 
   export function readSync(dir: string, options: Options = {}, relativeRoot= '') : DirJSON {
     const include = options.include;
     const exclude = options.exclude;
+    const ignoreEmptyDirs = options.ignoreEmptyDirs;
 
     let includeMatcher;
     let excludeMatcher;
@@ -47,6 +49,10 @@ namespace fixturify {
         obj[entry] = fs.readFileSync(fullPath, { encoding: 'utf8' });
       } else if (stats.isDirectory()) {
         obj[entry] = readSync(fullPath, options, relativePath);
+
+        if (ignoreEmptyDirs && !Object.keys(obj[entry] as DirJSON).length) {
+          delete obj[entry];
+        }
       } else {
         throw new Error(`Stat'ed ${fullPath} but it is neither file, symlink, nor directory`);
       }
