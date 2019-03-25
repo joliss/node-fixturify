@@ -28,5 +28,8 @@
   "scripts": {
     "prepare": "tsc -b .",
     "test": "tap --timeout 2 ./test.js"
-  }
+  },
+  "files": [
+    "index.[dj]*"
+  ]
 }
