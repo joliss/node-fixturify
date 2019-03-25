@@ -1,5 +1,9 @@
 # master
 
+# 1.1.0
+
+* add optional `ignoreEmptyDirs` argument to `readSync` this allows `readSync` to mimic `git` behavior
+
 # 1.0.1
 
 * fix types, correctly expose Options and DirJSON
