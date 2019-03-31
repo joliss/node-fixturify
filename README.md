@@ -77,7 +77,7 @@ To keep the API simple, node-fixturify has the following limitations:
 * Reading or setting file stats (last-modified time, permissions, etc.) is
   not supported.
 
-* Creating symlinks is not supported.
+* Creating symlinks is not supported. Symlinks are traversed when reading. Broken symlinks throw.
 
 * Special files like FIFOs, sockets, or devices are not supported.
 
