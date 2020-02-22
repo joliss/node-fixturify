@@ -1,5 +1,16 @@
 # master
 
+# 1.3.0
+
+* Switch to GH Actions
+* Document DirJSON interface
+* Add more detail to symlinks docs
+
+# 1.2.0
+
+* add ignoreEmptyDirs option
+* use files instead of npmignore
+
 # 1.0.1
 
 * fix types, correctly expose Options and DirJSON
