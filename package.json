@@ -23,7 +23,7 @@
     "typescript": "^3.3.3333"
   },
   "engines": {
-    "node": "6.* || 8.* || >= 10.*"
+    "node": "10.* || >= 12.*"
   },
   "scripts": {
     "prepare": "tsc -b .",
