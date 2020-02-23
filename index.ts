@@ -1,7 +1,6 @@
-import path = require('path');
 import fs = require('fs-extra');
-import MatcherCollection = require('matcher-collection');
 import { IMinimatch } from 'minimatch';
+import walkSync from 'walk-sync';
 
 namespace fixturify {
   /**
@@ -28,54 +27,46 @@ namespace fixturify {
   export interface Options {
     include?: (IMinimatch | string)[];
     exclude?: (IMinimatch | string)[];
-    ignoreEmptyDirs?: boolean;
+    ignoreEmptyDirs?: boolean,
+
+    globs?: (string|IMinimatch)[],
+    ignore?: (string|IMinimatch)[],
+    directories?: boolean
   }
 
-  export function readSync(dir: string, options: Options = {}, relativeRoot= '') : DirJSON {
-    const include = options.include;
-    const exclude = options.exclude;
+  // merge walkSync.Options + Options for now
+  export function readSync(dir: string, options: Options = {}, _relativeRoot= '') : DirJSON {
+    if ('include' in options) {
+      if ('globs' in options) {
+        throw new TypeError('fixturify.readSync does not support both options.include and options.globs, please only use options.globs.')
+      }
+      console.log('fixturify.readSync no longer supports options.include, please use options.globs instead.')
+      options.globs = options.include;
+    }
+
+
+    if ('exclude' in options) {
+      if ('ignore' in options) {
+        throw new TypeError('fixturify.readSync does not support both options.exclude and options.ignore, please only use options.ignore.')
+      }
+      console.log('fixturify.readSync no longer supports options.exclude, please use options.ignore instead.')
+      options.ignore = options.exclude;
+    }
+
     const ignoreEmptyDirs = options.ignoreEmptyDirs;
 
-    let includeMatcher;
-    let excludeMatcher;
-
-    if (include) {
-      includeMatcher = new MatcherCollection(include);
-    }
-    if (exclude) {
-      excludeMatcher = new MatcherCollection(exclude);
-    }
-
     const obj: DirJSON = {};
-    const entries = fs.readdirSync(dir).sort();
-    for (let i = 0; i < entries.length; i++) {
-      const entry = entries[i];
-      const relativePath = path.join(relativeRoot, entry);
-
-      if (includeMatcher && !includeMatcher.match(relativePath)) {
-        continue;
-      }
-
-      if (excludeMatcher && excludeMatcher.match(relativePath)) {
-        continue;
-      }
-
-      const fullPath = path.join(dir, entry);
-      const stats = fs.statSync(fullPath); // stat, unlike lstat, follows symlinks
-      if (stats.isFile()) {
-        obj[entry] = fs.readFileSync(fullPath, { encoding: 'utf8' });
-      } else if (stats.isDirectory()) {
-        obj[entry] = readSync(fullPath, options, relativePath);
-
-        if (ignoreEmptyDirs && !Object.keys(obj[entry] as DirJSON).length) {
-          delete obj[entry];
-        }
+    for (const entry of walkSync.entries(dir, {...options, directories:  !ignoreEmptyDirs})) {
+      if (entry.isDirectory() === false) {
+        addFile(obj, entry.relativePath, fs.readFileSync(entry.fullPath, 'UTF8'));
       } else {
-        throw new Error(`Stat'ed ${fullPath} but it is neither file, symlink, nor directory`);
+        addFolder(obj, entry.relativePath);
       }
     }
+
     return obj;
   }
+
 
   export function writeSync(dir: string, obj: DirJSON) {
     fs.mkdirpSync(dir);
@@ -126,7 +117,7 @@ namespace fixturify {
               fs.mkdirSync(fullPath);
             } catch (e) {
               // if the directory already exists, carry on.
-              // This is to support, re-appling (append-only) of fixtures
+              // This is to support, re-applying (append-only) of fixtures
               if (!(typeof e === 'object' && e !== null && e.code === 'EEXIST')) {
                 throw e;
               }
@@ -139,6 +130,39 @@ namespace fixturify {
       }
     }
   }
+}
+
+function addFile(obj: fixturify.DirJSON, path: string, content: string) {
+  const segments = path.split('/');
+  const file = segments.pop();
+
+  if (typeof file !== 'string') {
+    throw new Error(`invalid file path: '${path}'`);
+  }
+
+   addFolder(obj, segments)[file] = content;
+}
+
+function addFolder(obj: fixturify.DirJSON, path: string | string[]) {
+  const segments = Array.isArray(path) ? path : path.split('/');
+
+  for (const segment of segments) {
+    if (segment === '') {
+      break;
+    }
+    const entry = obj[segment];
+    if (entry === undefined) {
+      obj = obj[segment] = {};
+    } else {
+      if (typeof entry === 'object' && entry !== null) {
+        obj = entry;
+      } else {
+        throw new Error(`expected no existing directory entry for '${path}' but got '${entry}'`);
+      }
+    }
+  }
+
+  return obj;
 }
 
 export = fixturify;

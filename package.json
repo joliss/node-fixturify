@@ -14,7 +14,8 @@
     "@types/minimatch": "^3.0.3",
     "@types/rimraf": "^2.0.3",
     "fs-extra": "^8.1.0",
-    "matcher-collection": "^2.0.1"
+    "matcher-collection": "^2.0.1",
+    "walk-sync": "^2.0.2"
   },
   "devDependencies": {
     "@types/node": "^13.7.4",

@@ -27,10 +27,10 @@ fixturify.writeSync('testdir', obj) // write it to disk
 
 fixturify.readSync('testdir') // => deep-equals obj
 
-fixturify.readSync('testdir', { include: ['foo*'] }) // glob support
+fixturify.readSync('testdir', { globs: ['foo*'] }) // glob support
 // => { foo.txt: 'foo.text contents' }
 
-fixturify.readSync('testdir', { exclude: ['foo*'] }) // glob support
+fixturify.readSync('testdir', { ignore: ['foo*'] }) // glob support
 // => { subdir: { bar.txt: 'bar.text contents' } }
 
 fixturify.writeSync('testDir', {

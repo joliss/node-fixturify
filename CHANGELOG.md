@@ -1,8 +1,12 @@
 # master
 
+* use walk-sync as the walking implementation for readSync
+
 # 2.0.0
 
 * Drop unsupported Node versions to match node's own support policy
+* [DEPRECATED] options.include becomes options.globs to better match walk-sync
+* [DEPRECATED] options.exclude becomes options.ignore to better match walk-sync
 
 # 1.3.0
 

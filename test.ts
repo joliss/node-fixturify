@@ -3,19 +3,19 @@ import rimraf = require('rimraf');
 import fixturify = require('./')
 
 const test = require('tap').test;
-
 // smoke test the existence of these types via the typescript type checker
-let DirJSON: fixturify.DirJSON;
-let Options: fixturify.Options;
+
+const CONSOLE_LOG = console.log;
 
 test('writeSync', function (t: any) {
   rimraf.sync('testdir.tmp');
-  fixturify.writeSync('testdir.tmp', {
+  let dir: fixturify.DirJSON = {
     'foo.txt': 'foo.txt contents',
     'subdir': {
       'bar.txt': 'bar.txt contents'
     }
-  });
+  };
+  fixturify.writeSync('testdir.tmp', dir);
 
   t.deepEqual(fs.readdirSync('testdir.tmp').sort(), ['foo.txt', 'subdir']);
   t.deepEqual(fs.readdirSync('testdir.tmp/subdir').sort(), ['bar.txt']);
@@ -79,17 +79,35 @@ test('readSync include', function (t: any) {
   fs.writeFileSync('testdir.tmp/subdir/bar.txt', 'bar.txt contents');
   fs.symlinkSync('../foo.txt', 'testdir.tmp/subdir/symlink');
 
-  t.deepEqual(fixturify.readSync('testdir.tmp', {
-    include: ['foo*']
-  }), {
-    'foo.txt': 'foo.txt contents'
-  });
+  try {
+    const LOGS: any[] = [];
+    console.log = (...args: any[]) => LOGS.push(args)
+    t.deepEqual(fixturify.readSync('testdir.tmp', {
+      globs: ['foo*']
+    }), {
+      'foo.txt': 'foo.txt contents'
+    });
+
+    t.deepEqual(LOGS, []);
+
+    t.deepEqual(fixturify.readSync('testdir.tmp',{
+      include: ['foo*']
+    }), {
+      'foo.txt': 'foo.txt contents'
+    });
+    t.deepEqual(LOGS, [
+      ['fixturify.readSync no longer supports options.include, please use options.globs instead.']
+    ]);
+  } finally {
+    console.log = CONSOLE_LOG;
+  }
+
 
   rimraf.sync('testdir.tmp');
   t.end();
 });
 
-test('readSync exclude', function (t: any) {
+test('readSync ignore', function (t: any) {
   rimraf.sync('testdir.tmp');
   fs.mkdirSync('testdir.tmp');
   fs.writeFileSync('testdir.tmp/foo.txt', 'foo.txt contents');
@@ -97,14 +115,35 @@ test('readSync exclude', function (t: any) {
   fs.writeFileSync('testdir.tmp/subdir/bar.txt', 'bar.txt contents');
   fs.symlinkSync('../foo.txt', 'testdir.tmp/subdir/symlink');
 
-  t.deepEqual(fixturify.readSync('testdir.tmp', {
-    exclude: ['subdir/bar*']
-  }), {
-    'foo.txt': 'foo.txt contents',
-    'subdir': {
-      'symlink': 'foo.txt contents'
-    }
-  });
+  try {
+    const LOGS: any[] = [];
+    console.log = (...args: any[]) => LOGS.push(args)
+
+    t.deepEqual(fixturify.readSync('testdir.tmp', {
+      ignore: ['subdir/bar*']
+    }), {
+      'foo.txt': 'foo.txt contents',
+      'subdir': {
+        'symlink': 'foo.txt contents'
+      }
+    });
+
+    t.deepEqual(LOGS, []);
+    t.deepEqual(fixturify.readSync('testdir.tmp', {
+      exclude: ['subdir/bar*']
+    }), {
+      'foo.txt': 'foo.txt contents',
+      'subdir': {
+        'symlink': 'foo.txt contents'
+      }
+    });
+
+    t.deepEqual(LOGS, [
+      ["fixturify.readSync no longer supports options.exclude, please use options.ignore instead."]
+    ]);
+  } finally {
+    console.log = CONSOLE_LOG;
+  }
 
   rimraf.sync('testdir.tmp');
   t.end();
