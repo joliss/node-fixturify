@@ -1,5 +1,9 @@
 # master
 
+# 2.0.0
+
+* Drop unsupported Node versions to match node's own support policy
+
 # 1.3.0
 
 * Switch to GH Actions
