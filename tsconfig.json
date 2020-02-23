@@ -3,6 +3,7 @@
     "target": "es5",
     "strict": true,
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "esModuleInterop": true
   }
 }
