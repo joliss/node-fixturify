@@ -13,7 +13,6 @@ yarn add fixturify
 ## Usage
 
 ```js
-const fs = require('fs')
 const fixturify = require('fixturify')
 
 const obj = {
@@ -46,7 +45,6 @@ fixturify.writeSync('testDir', {
 ```
 
 ```js
-const fs = require('fs')
 const fixturify = require('fixturify')
 
 const obj = {
