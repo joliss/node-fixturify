@@ -56,9 +56,10 @@ namespace fixturify {
     const ignoreEmptyDirs = options.ignoreEmptyDirs;
 
     const obj: DirJSON = {};
-    for (const entry of walkSync.entries(dir, {...options, directories:  !ignoreEmptyDirs})) {
+    const entriesOptions: walkSync.Options = {...options, directories:  !ignoreEmptyDirs};
+    for (const entry of walkSync.entries(dir, entriesOptions)) {
       if (entry.isDirectory() === false) {
-        addFile(obj, entry.relativePath, fs.readFileSync(entry.fullPath, 'UTF8'));
+        addFile(obj, entry.relativePath, fs.readFileSync(entry.fullPath, 'utf8'));
       } else {
         addFolder(obj, entry.relativePath);
       }
@@ -68,9 +69,7 @@ namespace fixturify {
   }
 
 
-  export function writeSync(dir: string, obj: DirJSON) {
-    fs.mkdirpSync(dir);
-
+  export function writeSync(dir: string, obj: DirJSON) {    
     if ('string' !== typeof dir || dir === '') {
       throw new TypeError('writeSync first argument must be a non-empty string');
     }
@@ -78,6 +77,7 @@ namespace fixturify {
     if ('object' !== typeof obj && obj !== null) {
       throw new TypeError('writeSync second argument must be an object');
     }
+    fs.mkdirpSync(dir);
 
     for (let entry in obj) {
       if (obj.hasOwnProperty(entry)) {
@@ -105,7 +105,7 @@ namespace fixturify {
             fs.removeSync(fullPath);
           }
 
-          fs.writeFileSync(fullPath, value, 'UTF8');
+          fs.writeFileSync(fullPath, value, 'utf8');
         } else if (typeof value === 'object') {
           if (value === null) {
             fs.removeSync(fullPath);
@@ -118,7 +118,7 @@ namespace fixturify {
             } catch (e) {
               // if the directory already exists, carry on.
               // This is to support, re-applying (append-only) of fixtures
-              if (!(typeof e === 'object' && e !== null && e.code === 'EEXIST')) {
+              if (!(typeof e === 'object' && e !== null && (e as any).code === 'EEXIST')) {
                 throw e;
               }
             }
