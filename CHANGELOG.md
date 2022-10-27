@@ -1,5 +1,7 @@
 # master
 
+* Drop unsupported Node versions to match node's LTS support policy
+
 # 2.1.0
 
 * use walk-sync as the walking implementation for readSync

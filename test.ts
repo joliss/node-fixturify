@@ -19,8 +19,8 @@ test('writeSync', function (t: any) {
 
   t.deepEqual(fs.readdirSync('testdir.tmp').sort(), ['foo.txt', 'subdir']);
   t.deepEqual(fs.readdirSync('testdir.tmp/subdir').sort(), ['bar.txt']);
-  t.equal(fs.readFileSync('testdir.tmp/foo.txt', 'UTF8'), 'foo.txt contents');
-  t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', 'UTF8'), 'bar.txt contents');
+  t.equal(fs.readFileSync('testdir.tmp/foo.txt', 'utf8'), 'foo.txt contents');
+  t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', 'utf8'), 'bar.txt contents');
 
   fixturify.writeSync('testdir.tmp', {
     'something': 'foo.txt contents',
@@ -33,15 +33,15 @@ test('writeSync', function (t: any) {
   t.deepEqual(fs.readdirSync('testdir.tmp/subdir').sort(), ['bar.txt']);
   t.deepEqual(fs.readdirSync('testdir.tmp/else').sort(), ['bar.txt']);
 
-  t.equal(fs.readFileSync('testdir.tmp/foo.txt', 'UTF8'), 'foo.txt contents');
-  t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', 'UTF8'), 'bar.txt contents');
-  t.equal(fs.readFileSync('testdir.tmp/else/bar.txt',  'UTF8'), 'bar.txt contents');
+  t.equal(fs.readFileSync('testdir.tmp/foo.txt', 'utf8'), 'foo.txt contents');
+  t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', 'utf8'), 'bar.txt contents');
+  t.equal(fs.readFileSync('testdir.tmp/else/bar.txt',  'utf8'), 'bar.txt contents');
 
   fixturify.writeSync('testdir.tmp', {
     'else': 'else is now a file'
   });
 
-  t.equal(fs.readFileSync('testdir.tmp/else',  'UTF8'), 'else is now a file');
+  t.equal(fs.readFileSync('testdir.tmp/else',  'utf8'), 'else is now a file');
   fixturify.writeSync('testdir.tmp', {
     'empty-dir': { }
   });
@@ -191,8 +191,8 @@ test('writeSync remove', function (t: any) {
 
   t.deepEqual(fs.readdirSync('testdir.tmp').sort(), ['foo.txt', 'subdir']);
   t.deepEqual(fs.readdirSync('testdir.tmp/subdir').sort(), ['bar.txt']);
-  t.equal(fs.readFileSync('testdir.tmp/foo.txt', 'UTF8'), 'foo.txt contents');
-  t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', 'UTF8'), 'bar.txt contents');
+  t.equal(fs.readFileSync('testdir.tmp/foo.txt', 'utf8'), 'foo.txt contents');
+  t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', 'utf8'), 'bar.txt contents');
 
   fixturify.writeSync('testdir.tmp', {
     'subdir': {
@@ -209,7 +209,7 @@ test('writeSync remove', function (t: any) {
   });
 
   t.deepEqual(fs.readdirSync('testdir.tmp/').sort(), ['foo.txt', 'subdir']);
-  t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', 'UTF8'), 'hi');
+  t.equal(fs.readFileSync('testdir.tmp/subdir/bar.txt', 'utf8'), 'hi');
 
   fixturify.writeSync('testdir.tmp', {
     'subdir': null

@@ -18,12 +18,12 @@ jobs:
 
     strategy:
       matrix:
-        node: ['10', '12']
+        node: ['14', '16', '18']
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/setup-node@v1
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node }}
     - name: install dependencies
