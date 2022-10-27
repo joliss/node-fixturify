@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/node": "^18.11.7",
     "rimraf": "^3.0.2",
-    "tap": "^14.10.6",
+    "tap": "^16.3.0",
     "typescript": "^4.8.4"
   },
   "engines": {
@@ -29,6 +29,9 @@
   "scripts": {
     "prepare": "tsc -b .",
     "test": "tap --timeout 10 ./test.js"
+  },
+  "tap": {
+    "coverage": false
   },
   "files": [
     "index.d.ts",

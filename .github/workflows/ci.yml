@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        node: ['14', '16', '18']
+        node: ['14', '16', '18', '19']
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
