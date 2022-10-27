@@ -1,7 +1,5 @@
 # master
 
-# 3.0.0
-
 * Drop unsupported Node versions to match node's LTS support policy
 
 # 2.1.0
