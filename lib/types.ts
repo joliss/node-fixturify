@@ -1,3 +1,7 @@
+import { Minimatch } from "npm:minimatch@9.0.3";
+
+export type IMinimatch = typeof Minimatch;
+
 /**
   A recursive JSON representation of a directory. This representation includes
   both files, their contents and directories which can contain both files and
@@ -20,11 +24,11 @@ export interface DirJSON {
 }
 
 export interface Options {
-  include?: string[];
-  exclude?: string[];
+  include?: (IMinimatch | string)[];
+  exclude?: (IMinimatch | string)[];
   ignoreEmptyDirs?: boolean;
 
-  globs?: string[];
-  ignore?: string[];
+  globs?: (string | IMinimatch)[];
+  ignore?: (string | IMinimatch)[];
   includeDirs?: boolean;
 }

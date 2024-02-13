@@ -1,5 +1,4 @@
-import { DirJSON } from "./main.ts";
-
+import { DirJSON } from "./types.ts";
 
 export function addFolder(obj: DirJSON, path: string | string[]) {
   const segments = Array.isArray(path) ? path : path.split("/");

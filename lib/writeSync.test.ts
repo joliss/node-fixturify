@@ -2,16 +2,11 @@ import fs from "https://deno.land/std@0.148.0/node/fs.ts";
 import { DirJSON } from "./types.ts";
 import { writeSync } from "./writeSync.ts";
 import { assertEquals } from "https://deno.land/std@0.215.0/assert/mod.ts";
-
-async function removeTestDir() {
-  try {
-    await Deno.remove("testdir.tmp", { recursive: true });
-  } catch {}
-}
+import { removeTestDir } from "../test_helpers.ts";
 
 Deno.test("writeSync", async () => {
   await removeTestDir();
-  
+
   const dir: DirJSON = {
     "foo.txt": "foo.txt contents",
     subdir: {
