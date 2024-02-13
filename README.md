@@ -1,19 +1,14 @@
-# node-fixturify
-![CI](https://github.com/joliss/node-fixturify/workflows/CI/badge.svg)
+# deno-fixturify
+
+Deno-compatible fork of [node-fixturify](https://github.com/joliss/node-fixturify)
 
 Convert JSON objects into directory structures on the file system, and back
 again. This package is primarily useful for writing tests.
 
-## Installation
-
-```bash
-yarn add fixturify
-```
-
 ## Usage
 
 ```js
-const fixturify = require('fixturify')
+import { writeSync } from 'https://deno.land/x/fixturify'
 
 const obj = {
   'foo.txt': 'foo.txt contents',
@@ -22,30 +17,30 @@ const obj = {
   }
 }
 
-fixturify.writeSync('testdir', obj) // write it to disk
+writeSync('testdir', obj) // write it to disk
 
-fixturify.readSync('testdir') // => deep-equals obj
+readSync('testdir') // => deep-equals obj
 
-fixturify.readSync('testdir', { globs: ['foo*'] }) // glob support
+readSync('testdir', { globs: ['foo*'] }) // glob support
 // => { foo.txt: 'foo.text contents' }
 
-fixturify.readSync('testdir', { ignore: ['foo*'] }) // glob support
+readSync('testdir', { ignore: ['foo*'] }) // glob support
 // => { subdir: { bar.txt: 'bar.text contents' } }
 
-fixturify.writeSync('testDir', {
+writeSync('testDir', {
   'subdir': { 'bar.txt': null }
 }) // remove subdir/bar.txt
 
-fixturify.readSync('testdir') // => { foo.txt: 'foo.text contents' }
+readSync('testdir') // => { foo.txt: 'foo.text contents' }
 
-fixturify.writeSync('testDir', {
+writeSync('testDir', {
   'subdir': null
 }) // remove subdir/
 
 ```
 
 ```js
-const fixturify = require('fixturify')
+import { writeSync } from 'https://deno.land/x/fixturify'
 
 const obj = {
   'subdir': {
@@ -54,16 +49,16 @@ const obj = {
   'emptydir': {}
 }
 
-fixturify.writeSync('testdir', obj) // write it to disk
+writeSync('testdir', obj) // write it to disk
 
-fixturify.readSync('testdir', { ignoreEmptyDirs: true })
+readSync('testdir', { ignoreEmptyDirs: true })
 // => { subdir: { foo.txt': 'foo.txt contents' } }
 
 ```
 
 File contents are decoded and encoded with UTF-8.
 
-`fixture.readSync` follows symlinks. It throws an error if it encounters a
+`readSync` follows symlinks. It throws an error if it encounters a
 broken symlink.
 
 ## Limitations
