@@ -1,4 +1,4 @@
-# deno-fixturify
+# fixturify
 
 Deno-compatible fork of [node-fixturify](https://github.com/joliss/node-fixturify)
 
