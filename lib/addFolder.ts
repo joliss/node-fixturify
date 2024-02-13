@@ -15,7 +15,7 @@ export function addFolder(obj: DirJSON, path: string | string[]) {
         obj = entry;
       } else {
         throw new Error(
-          `expected no existing directory entry for '${path}' but got '${entry}'`
+          `expected no existing directory entry for '${path}' but got '${entry}'`,
         );
       }
     }

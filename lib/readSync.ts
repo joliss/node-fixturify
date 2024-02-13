@@ -1,7 +1,7 @@
-import { Options, DirJSON } from "./types.ts";
+import { DirJSON, Options } from "./types.ts";
 import { addFolder } from "./addFolder.ts";
 import { addFile } from "./addFile.ts";
-import * as walkSync from './walkSync.ts';
+import * as walkSync from "./walkSync.ts";
 import fs from "node:fs";
 
 // merge walkSync.Options + Options for now
@@ -9,16 +9,16 @@ import fs from "node:fs";
 export function readSync(
   dir: string,
   options: Options = {},
-  _relativeRoot = ""
+  _relativeRoot = "",
 ): DirJSON {
   if ("include" in options) {
     if ("globs" in options) {
       throw new TypeError(
-        "fixturify.readSync does not support both options.include and options.globs, please only use options.globs."
+        "fixturify.readSync does not support both options.include and options.globs, please only use options.globs.",
       );
     }
     console.log(
-      "fixturify.readSync no longer supports options.include, please use options.globs instead."
+      "fixturify.readSync no longer supports options.include, please use options.globs instead.",
     );
     options.globs = options.include;
   }
@@ -26,11 +26,11 @@ export function readSync(
   if ("exclude" in options) {
     if ("ignore" in options) {
       throw new TypeError(
-        "fixturify.readSync does not support both options.exclude and options.ignore, please only use options.ignore."
+        "fixturify.readSync does not support both options.exclude and options.ignore, please only use options.ignore.",
       );
     }
     console.log(
-      "fixturify.readSync no longer supports options.exclude, please use options.ignore instead."
+      "fixturify.readSync no longer supports options.exclude, please use options.ignore instead.",
     );
     options.ignore = options.exclude;
   }
@@ -47,7 +47,7 @@ export function readSync(
       addFile(
         obj,
         entry.relativePath,
-        fs.readFileSync(entry.fullPath, "utf8")
+        fs.readFileSync(entry.fullPath, "utf8"),
       );
     } else {
       addFolder(obj, entry.relativePath);

@@ -2,9 +2,7 @@ import fsNode from "node:fs";
 import path from "node:path";
 import ensurePosix from "npm:ensure-posix-path@1.1.1";
 import MatcherCollection from "npm:matcher-collection@2.0.1";
-import {
-  Minimatch, MinimatchOptions,
-} from "npm:minimatch@9.0.3";
+import { Minimatch, MinimatchOptions } from "npm:minimatch@9.0.3";
 import { IMinimatch } from "./types.ts";
 
 export function entries(
@@ -212,7 +210,7 @@ function _walkSync(
             baseDir,
             stats.mode ? stats.mode : 0,
             stats.size,
-            stats.mtime ? stats.mtime.getTime(): 0,
+            stats.mtime ? stats.mtime.getTime() : 0,
           );
         } else {
           return new Entry(

@@ -2,66 +2,67 @@
 
 # 3.0.0
 
-* Drop unsupported Node versions to match node's LTS support policy
+- Drop unsupported Node versions to match node's LTS support policy
 
 # 2.1.0
 
-* use walk-sync as the walking implementation for readSync
-* [DEPRECATED] options.include becomes options.globs to better match walk-sync
-* [DEPRECATED] options.exclude becomes options.ignore to better match walk-sync
+- use walk-sync as the walking implementation for readSync
+- [DEPRECATED] options.include becomes options.globs to better match walk-sync
+- [DEPRECATED] options.exclude becomes options.ignore to better match walk-sync
 
 # 2.0.0
 
-* Drop unsupported Node versions to match node's own support policy
+- Drop unsupported Node versions to match node's own support policy
 
 # 1.3.0
 
-* Switch to GH Actions
-* Document DirJSON interface
-* Add more detail to symlinks docs
+- Switch to GH Actions
+- Document DirJSON interface
+- Add more detail to symlinks docs
 
 # 1.2.0
 
-* add ignoreEmptyDirs option
-* use files instead of npmignore
+- add ignoreEmptyDirs option
+- use files instead of npmignore
 
 # 1.0.1
 
-* fix types, correctly expose Options and DirJSON
+- fix types, correctly expose Options and DirJSON
 
 # 1.0.0
 
-* typescript
-* change node support to 6.* || 8.* || >= 10.*
+- typescript
+- change node support to 6.* || 8.* || >= 10.*
 
 # 0.3.4
 
-* Add `include` and `exclude` options to `readSync`
+- Add `include` and `exclude` options to `readSync`
 
 # 0.3.3
 
-* [BUGIFX] Ensure stat information is reset for each item in fixture when writing
+- [BUGIFX] Ensure stat information is reset for each item in fixture when
+  writing
 
 # 0.3.2
 
-* Improve ergonomics: auto mkdirp when using `fixtureify.writeSync(path, tree);`
+- Improve ergonomics: auto mkdirp when using `fixtureify.writeSync(path, tree);`
 
 # 0.3.1
 
-* Fix README typo
+- Fix README typo
 
 # 0.3.0
 
-* Allow for overwriting and removing files and directories
+- Allow for overwriting and removing files and directories
 
 # 0.2.0
 
-* Always follow symlinks
+- Always follow symlinks
 
 # 0.1.1
 
-* Fix bug due to missing `var`
+- Fix bug due to missing `var`
 
 # 0.1.0
 
-* Initial release
+- Initial release
