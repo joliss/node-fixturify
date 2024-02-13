@@ -3,55 +3,6 @@ import { DirJSON } from "./types.ts";
 const CONSOLE_LOG = console.log;
 
 
-
-test("writeSync remove", function (t: any) {
-  rimraf.sync("testdir.tmp");
-  fs.mkdirSync("testdir.tmp");
-  fs.writeFileSync("testdir.tmp/foo.txt", "foo.txt contents");
-  fs.mkdirSync("testdir.tmp/subdir");
-  fs.writeFileSync("testdir.tmp/subdir/bar.txt", "bar.txt contents");
-  fs.symlinkSync("../foo.txt", "testdir.tmp/subdir/symlink");
-
-  fixturify.writeSync("testdir.tmp", {
-    subdir: {
-      symlink: null,
-    },
-  });
-
-  t.deepEqual(fs.readdirSync("testdir.tmp").sort(), ["foo.txt", "subdir"]);
-  t.deepEqual(fs.readdirSync("testdir.tmp/subdir").sort(), ["bar.txt"]);
-  t.equal(fs.readFileSync("testdir.tmp/foo.txt", "utf8"), "foo.txt contents");
-  t.equal(
-    fs.readFileSync("testdir.tmp/subdir/bar.txt", "utf8"),
-    "bar.txt contents",
-  );
-
-  fixturify.writeSync("testdir.tmp", {
-    subdir: {
-      "bar.txt": null,
-    },
-  });
-
-  t.deepEqual(fs.readdirSync("testdir.tmp/").sort(), ["foo.txt", "subdir"]);
-
-  fixturify.writeSync("testdir.tmp", {
-    subdir: {
-      "bar.txt": "hi",
-    },
-  });
-
-  t.deepEqual(fs.readdirSync("testdir.tmp/").sort(), ["foo.txt", "subdir"]);
-  t.equal(fs.readFileSync("testdir.tmp/subdir/bar.txt", "utf8"), "hi");
-
-  fixturify.writeSync("testdir.tmp", {
-    subdir: null,
-  });
-  t.deepEqual(fs.readdirSync("testdir.tmp/").sort(), ["foo.txt"]);
-
-  rimraf.sync("testdir.tmp");
-  t.end();
-});
-
 test("error conditions", function (t: any) {
   test("writeSync arguments requires specific input", function (t: any) {
     // @ts-ignore

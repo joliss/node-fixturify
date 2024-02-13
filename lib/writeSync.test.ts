@@ -70,3 +70,49 @@ Deno.test("writeSync", async () => {
 
   assertEquals(fs.readdirSync("testdir.tmp/empty-dir").sort(), []);
 });
+
+Deno.test("writeSync remove", async () => {
+  await removeTestDir();
+
+  fs.mkdirSync("testdir.tmp");
+  fs.writeFileSync("testdir.tmp/foo.txt", "foo.txt contents");
+  fs.mkdirSync("testdir.tmp/subdir");
+  fs.writeFileSync("testdir.tmp/subdir/bar.txt", "bar.txt contents");
+  fs.symlinkSync("../foo.txt", "testdir.tmp/subdir/symlink");
+
+  writeSync("testdir.tmp", {
+    subdir: {
+      symlink: null,
+    },
+  });
+
+  assertEquals(fs.readdirSync("testdir.tmp").sort(), ["foo.txt", "subdir"]);
+  assertEquals(fs.readdirSync("testdir.tmp/subdir").sort(), ["bar.txt"]);
+  assertEquals(fs.readFileSync("testdir.tmp/foo.txt", "utf8"), "foo.txt contents");
+  assertEquals(
+    fs.readFileSync("testdir.tmp/subdir/bar.txt", "utf8"),
+    "bar.txt contents",
+  );
+
+  writeSync("testdir.tmp", {
+    subdir: {
+      "bar.txt": null,
+    },
+  });
+
+  assertEquals(fs.readdirSync("testdir.tmp/").sort(), ["foo.txt", "subdir"]);
+
+  writeSync("testdir.tmp", {
+    subdir: {
+      "bar.txt": "hi",
+    },
+  });
+
+  assertEquals(fs.readdirSync("testdir.tmp/").sort(), ["foo.txt", "subdir"]);
+  assertEquals(fs.readFileSync("testdir.tmp/subdir/bar.txt", "utf8"), "hi");
+
+  writeSync("testdir.tmp", {
+    subdir: null,
+  });
+  assertEquals(fs.readdirSync("testdir.tmp/").sort(), ["foo.txt"]);
+});

@@ -38,7 +38,7 @@ export function writeSync(dir: string, obj: DirJSON) {
       fs.writeFileSync(fullPath, value, "utf8");
     } else if (typeof value === "object") {
       if (value === null) {
-        fs.rmSync(fullPath);
+        fs.rmSync(fullPath, { recursive: true });
       } else {
         try {
           if (stat && stat.isFile()) {
