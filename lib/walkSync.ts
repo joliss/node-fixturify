@@ -195,14 +195,14 @@ function _walkSync(
 
     const entries = names
       .map((name) => {
-        let entryRelativePath = relativePath + name;
+        const entryRelativePath = relativePath + name;
 
         if (ignoreMatcher && ignoreMatcher.match(entryRelativePath)) {
           return;
         }
 
-        let fullPath = baseDir + "/" + entryRelativePath;
-        let stats = getStat(fullPath, fs);
+        const fullPath = baseDir + "/" + entryRelativePath;
+        const stats = getStat(fullPath, fs);
 
         if (stats && stats.isDirectory()) {
           return new Entry(
@@ -227,7 +227,7 @@ function _walkSync(
     const sortedEntries = entries.sort(lexicographically);
 
     for (let i = 0; i < sortedEntries.length; ++i) {
-      let entry = sortedEntries[i];
+      const entry = sortedEntries[i];
 
       if (entry.isDirectory()) {
         if (

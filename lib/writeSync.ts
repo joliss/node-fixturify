@@ -26,7 +26,7 @@ export function writeSync(dir: string, obj: DirJSON) {
 
     try {
       stat = fs.statSync(fullPath);
-    } catch (e) {
+    } catch {
       stat = undefined;
     }
 
@@ -52,7 +52,7 @@ export function writeSync(dir: string, obj: DirJSON) {
             !(
               typeof e === "object" &&
               e !== null &&
-              (e as any).code === "EEXIST"
+              e.code === "EEXIST"
             )
           ) {
             throw e;

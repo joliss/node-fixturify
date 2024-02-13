@@ -124,13 +124,13 @@ Deno.test("writeSync remove", async () => {
 });
 
 Deno.test("writeSync arguments requires specific input", () => {
-  // @ts-ignore
+  // @ts-expect-error deno-ts(2554)
   assertThrows(() => writeSync());
-  // @ts-ignore
+  // @ts-ignore deno-ts(2554)
   assertThrows(() => writeSync(null));
-  // @ts-ignore
+  // @ts-expect-error deno-ts(2554)
   assertThrows(() => writeSync(null, null));
-  // @ts-ignore
+  // @ts-expect-error deno-ts(2554)
   assertThrows(() => writeSync(null, {}));
 });
 

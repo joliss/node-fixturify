@@ -1,5 +1,6 @@
 export async function removeTestDir() {
-  try {
-    await Deno.remove("testdir.tmp", { recursive: true });
-  } catch {}
+    const info = await Deno.stat("testdir.tmp");
+    if (info.isDirectory) {
+      await Deno.remove("testdir.tmp", { recursive: true });
+    }
 }

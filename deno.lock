@@ -2,6 +2,7 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "npm:@types/node": "npm:@types/node@18.16.19",
       "npm:ensure-posix-path": "npm:ensure-posix-path@1.1.1",
       "npm:ensure-posix-path@1.1.1": "npm:ensure-posix-path@1.1.1",
       "npm:matcher-collection@2.0.1": "npm:matcher-collection@2.0.1",
@@ -13,6 +14,10 @@
     "npm": {
       "@types/minimatch@3.0.5": {
         "integrity": "sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==",
+        "dependencies": {}
+      },
+      "@types/node@18.16.19": {
+        "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
         "dependencies": {}
       },
       "balanced-match@1.0.2": {

@@ -32,7 +32,4 @@ jobs:
       - name: lint
         run: deno lint
 
-      - name: test
-        run: deno task test
-      - name: test:node
-        run: deno task test:node
+      - run: deno test -A 
