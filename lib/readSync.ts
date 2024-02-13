@@ -1,6 +1,12 @@
-import { Options, DirJSON } from "./types.ts";
-import { addFolder } from "./addFolder.ts";
+import { readFileSync } from "https://deno.land/std@0.148.0/node/fs.ts";
+import { join } from "https://deno.land/std@0.148.0/node/path.ts";
+import {
+  WalkOptions,
+  walkSync,
+} from "https://deno.land/std@0.215.0/fs/walk.ts";
 import { addFile } from "./addFile.ts";
+import { addFolder } from "./addFolder.ts";
+import { DirJSON, Options } from "./types.ts";
 
 // merge walkSync.Options + Options for now
 
@@ -36,19 +42,19 @@ export function readSync(
   const ignoreEmptyDirs = options.ignoreEmptyDirs;
 
   const obj: DirJSON = {};
-  const entriesOptions: walkSync.Options = {
+  const entriesOptions: WalkOptions = {
     ...options,
-    directories: !ignoreEmptyDirs,
+    includeDirs: !ignoreEmptyDirs,
   };
-  for (const entry of walkSync.entries(dir, entriesOptions)) {
-    if (entry.isDirectory() === false) {
+  for (const entry of walkSync(dir, entriesOptions)) {
+    if (entry.isDirectory === false) {
       addFile(
         obj,
-        entry.relativePath,
-        fs.readFileSync(entry.fullPath, "utf8")
+        entry.name,
+        readFileSync(join(dir, entry.name), "utf8")
       );
     } else {
-      addFolder(obj, entry.relativePath);
+      addFolder(obj, entry.name);
     }
   }
 

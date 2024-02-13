@@ -1,5 +1,3 @@
-import { IMinimatch } from "npm:minimatch@9.0.3";
-
 /**
   A recursive JSON representation of a directory. This representation includes
   both files, their contents and directories which can contain both files and
@@ -22,11 +20,11 @@ export interface DirJSON {
 }
 
 export interface Options {
-  include?: (IMinimatch | string)[];
-  exclude?: (IMinimatch | string)[];
+  include?: string[];
+  exclude?: string[];
   ignoreEmptyDirs?: boolean;
 
-  globs?: (string | IMinimatch)[];
-  ignore?: (string | IMinimatch)[];
-  directories?: boolean;
+  globs?: string[];
+  ignore?: string[];
+  includeDirs?: boolean;
 }

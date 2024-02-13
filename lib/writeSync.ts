@@ -1,6 +1,4 @@
-import { ensureDirSync } from "https://deno.land/std@0.215.0/fs/ensure_dir.ts";
-import { unlinkSync } from "https://deno.land/std@0.148.0/node/fs.ts";
-
+import fs from "https://deno.land/std@0.148.0/node/fs.ts";
 import { DirJSON } from "./types.ts";
 
 export function writeSync(dir: string, obj: DirJSON) {
@@ -11,7 +9,7 @@ export function writeSync(dir: string, obj: DirJSON) {
   if ("object" !== typeof obj && obj !== null) {
     throw new TypeError("writeSync second argument must be an object");
   }
-  ensureDirSync(dir);
+  fs.mkdirSync(dir, { recursive: true });
 
   for (const [entry, value] of Object.entries(obj)) {
     if ("string" !== typeof entry || entry === "") {
@@ -27,30 +25,36 @@ export function writeSync(dir: string, obj: DirJSON) {
     let stat;
 
     try {
-      stat = Deno.statSync(fullPath);
-    } catch {
+      stat = fs.statSync(fullPath);
+    } catch (e) {
       stat = undefined;
     }
 
     if (typeof value === "string") {
-      if (stat && stat.isDirectory) {
-        Deno.removeSync(fullPath);
+      if (stat && stat.isDirectory()) {
+        fs.rmSync(fullPath, { recursive: true });
       }
 
-      Deno.writeFileSync(fullPath, new TextEncoder().encode(value));
+      fs.writeFileSync(fullPath, value, "utf8");
     } else if (typeof value === "object") {
       if (value === null) {
-        Deno.removeSync(fullPath);
+        fs.rmSync(fullPath);
       } else {
         try {
-          if (stat && stat.isFile) {
-            unlinkSync(fullPath);
+          if (stat && stat.isFile()) {
+            fs.unlinkSync(fullPath);
           }
-          ensureDirSync(fullPath);
+          fs.mkdirSync(fullPath);
         } catch (e) {
           // if the directory already exists, carry on.
           // This is to support, re-applying (append-only) of fixtures
-          if (!(typeof e === "object" && e !== null && e.code === "EEXIST")) {
+          if (
+            !(
+              typeof e === "object" &&
+              e !== null &&
+              (e as any).code === "EEXIST"
+            )
+          ) {
             throw e;
           }
         }
