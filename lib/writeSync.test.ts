@@ -1,8 +1,11 @@
 import fs from "https://deno.land/std@0.148.0/node/fs.ts";
+import {
+  assertEquals,
+  assertThrows,
+} from "https://deno.land/std@0.215.0/assert/mod.ts";
+import { removeTestDir } from "../test_helpers.ts";
 import { DirJSON } from "./types.ts";
 import { writeSync } from "./writeSync.ts";
-import { assertEquals } from "https://deno.land/std@0.215.0/assert/mod.ts";
-import { removeTestDir } from "../test_helpers.ts";
 
 Deno.test("writeSync", async () => {
   await removeTestDir();
@@ -88,7 +91,10 @@ Deno.test("writeSync remove", async () => {
 
   assertEquals(fs.readdirSync("testdir.tmp").sort(), ["foo.txt", "subdir"]);
   assertEquals(fs.readdirSync("testdir.tmp/subdir").sort(), ["bar.txt"]);
-  assertEquals(fs.readFileSync("testdir.tmp/foo.txt", "utf8"), "foo.txt contents");
+  assertEquals(
+    fs.readFileSync("testdir.tmp/foo.txt", "utf8"),
+    "foo.txt contents",
+  );
   assertEquals(
     fs.readFileSync("testdir.tmp/subdir/bar.txt", "utf8"),
     "bar.txt contents",
@@ -116,3 +122,71 @@ Deno.test("writeSync remove", async () => {
   });
   assertEquals(fs.readdirSync("testdir.tmp/").sort(), ["foo.txt"]);
 });
+
+Deno.test("writeSync arguments requires specific input", () => {
+  // @ts-ignore
+  assertThrows(() => writeSync());
+  // @ts-ignore
+  assertThrows(() => writeSync(null));
+  // @ts-ignore
+  assertThrows(() => writeSync(null, null));
+  // @ts-ignore
+  assertThrows(() => writeSync(null, {}));
+});
+
+Deno.test(
+  "writeSync guards against misuse that could cause data loss",
+  async () => {
+    // Test that we guard against usage errors that might cause data loss
+    // through fs.removeSync('' + '/' + '') or similar.
+    await removeTestDir();
+
+    assertThrows(
+      () => writeSync("", {}),
+      // /non-empty string/
+    );
+    assertThrows(
+      () => writeSync("testdir.tmp", { "": "contents" }),
+      // /non-empty string/,
+    );
+    assertThrows(
+      () => writeSync("testdir.tmp", { ".": {} }),
+      // /must not be "\." or "\.\."/,
+    );
+    assertThrows(
+      () => writeSync("testdir.tmp", { "..": {} }),
+      // /must not be "\." or "\.\."/,
+    );
+    assertThrows(
+      () => writeSync("testdir.tmp", { "foo/bar": {} }),
+      // /must not contain "\/" or "\\"/,
+    );
+    assertThrows(
+      () => writeSync("testdir.tmp", { "foo\\bar": {} }),
+      // /must not contain "\/" or "\\"/,
+    );
+  },
+);
+
+Deno.test(
+  "writeSync handles overwriting a file and then creating a new file",
+  async () => {
+    await removeTestDir();
+
+    fs.mkdirSync("testdir.tmp");
+
+    writeSync("testdir.tmp", {
+      "a.txt": "a.txt content",
+      b: {},
+    });
+
+    assertEquals(fs.readdirSync("testdir.tmp").sort(), ["a.txt", "b"]);
+
+    writeSync("testdir.tmp", {
+      "a.txt": "a.txt updated",
+      c: {},
+    });
+
+    assertEquals(fs.readdirSync("testdir.tmp").sort(), ["a.txt", "b", "c"]);
+  },
+);

@@ -1,5 +1,8 @@
 import fs from "https://deno.land/std@0.148.0/node/fs.ts";
-import { assertEquals } from "https://deno.land/std@0.215.0/assert/mod.ts";
+import {
+  assertEquals,
+  assertThrows,
+} from "https://deno.land/std@0.215.0/assert/mod.ts";
 import { removeTestDir } from "../test_helpers.ts";
 import { readSync } from "./readSync.ts";
 
@@ -50,14 +53,14 @@ Deno.test("readSync include", async () => {
 
     assertEquals(LOGS, []);
 
-   assertEquals(
-     readSync("testdir.tmp", {
-       include: ["foo*"],
-     }),
-     {
-       "foo.txt": "foo.txt contents",
-     },
-   );
+    assertEquals(
+      readSync("testdir.tmp", {
+        include: ["foo*"],
+      }),
+      {
+        "foo.txt": "foo.txt contents",
+      },
+    );
     assertEquals(LOGS, [
       [
         "fixturify.readSync no longer supports options.include, please use options.globs instead.",
@@ -139,4 +142,13 @@ Deno.test("readSync ignoreEmptyDirs true", async () => {
     }),
     {},
   );
+});
+
+Deno.test("readSync throws on broken symlinks", async () => {
+  await removeTestDir();
+
+  fs.mkdirSync("testdir.tmp");
+  fs.symlinkSync("doesnotexist", "testdir.tmp/symlink");
+
+  assertThrows(() => readSync("testdir.tmp"));
 });
