@@ -1,5 +1,5 @@
-import fsNode from "https://deno.land/std@0.148.0/node/fs.ts";
-import path from "https://deno.land/std@0.148.0/node/path.ts";
+import fsNode from "node:fs";
+import path from "node:path";
 import ensurePosix from "npm:ensure-posix-path@1.1.1";
 import MatcherCollection from "npm:matcher-collection@2.0.1";
 import {

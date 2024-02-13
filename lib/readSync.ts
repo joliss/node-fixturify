@@ -2,7 +2,7 @@ import { Options, DirJSON } from "./types.ts";
 import { addFolder } from "./addFolder.ts";
 import { addFile } from "./addFile.ts";
 import * as walkSync from './walkSync.ts';
-import fs from "https://deno.land/std@0.148.0/node/fs.ts";
+import fs from "node:fs";
 
 // merge walkSync.Options + Options for now
 
