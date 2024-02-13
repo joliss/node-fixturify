@@ -8,7 +8,7 @@ again. This package is primarily useful for writing tests.
 ## Usage
 
 ```js
-import { writeSync } from 'https://deno.land/x/fixturify'
+import { writeSync, readSync } from 'https://deno.land/x/fixturify'
 
 const obj = {
   'foo.txt': 'foo.txt contents',
@@ -40,7 +40,7 @@ writeSync('testDir', {
 ```
 
 ```js
-import { writeSync } from 'https://deno.land/x/fixturify'
+import { writeSync, readSync } from 'https://deno.land/x/fixturify'
 
 const obj = {
   'subdir': {
