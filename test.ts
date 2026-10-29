@@ -1,8 +1,8 @@
-import fs = require('fs');
-import rimraf = require('rimraf');
-import fixturify = require('./')
+import fs from 'node:fs';
+import rimraf from 'rimraf';
+import * as fixturify from './index.js'
 
-const test = require('tap').test;
+import { test } from 'tap';
 // smoke test the existence of these types via the typescript type checker
 
 const CONSOLE_LOG = console.log;
