@@ -24,7 +24,7 @@
     "typescript": "^4.8.4"
   },
   "engines": {
-    "node": "14.* || >= 16.*"
+    "node": "22.* || 24.* || >= 26.*"
   },
   "scripts": {
     "prepare": "tsc -b .",

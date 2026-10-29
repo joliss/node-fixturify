@@ -3,13 +3,13 @@ name: CI
 on:
   push:
     branches:
+      - main
       - master
-      - 'v*' # older version branches
-    tags:
-      - '*'
   pull_request: {}
-  schedule:
-  - cron:  '0 6 * * 0' # weekly, on sundays
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        node: ['14', '16', '18', '19']
+        node: ['22', '24', '26']
         os: [ubuntu-latest, macOS-latest, windows-latest]
 
     steps:
