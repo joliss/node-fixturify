@@ -13,7 +13,7 @@ yarn add fixturify
 ## Usage
 
 ```js
-const fixturify = require('fixturify')
+import * as fixturify from 'fixturify';
 
 const obj = {
   'foo.txt': 'foo.txt contents',
@@ -45,7 +45,7 @@ fixturify.writeSync('testDir', {
 ```
 
 ```js
-const fixturify = require('fixturify')
+import * as fixturify from 'fixturify';
 
 const obj = {
   'subdir': {
